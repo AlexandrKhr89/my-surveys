@@ -1,9 +1,12 @@
 <?php
+
 /**
  * Our frameworks core class
  */
-class Framework {
-	public static function run() {
+class Framework
+{
+	public static function run()
+	{
 		echo "Welcome to our framework! <br> It is running! :)";
 		self::init();
 		self::autoload();
@@ -13,7 +16,8 @@ class Framework {
 	/**
 	 * Initialization
 	 */
-	private static function init() {
+	private static function init()
+	{
 //		Define path constants
 
 		define("DS", DIRECTORY_SEPARATOR);
@@ -35,6 +39,9 @@ class Framework {
 
 		define("UPLOAD_PATH", PUBLIC_PATH . 'uploads' . DS);
 
+		define("CURR_CONTROLLER_PATH", CONTROLLER_PATH . PLATFORM . DS);
+		define("CURR_VIEW_PATH", VIEW_PATH . PLATFORM . DS);
+
 //		Load core classes
 		require CORE_PATH . "Controller.class.php";
 		require CORE_PATH . "Loader.class.php";
@@ -48,12 +55,33 @@ class Framework {
 		session_start();
 
 	}
-	
-	private static function autoload() {
+
+	/**
+	 * Autoloading
+	 */
+	private static function autoload()
+	{
+		spl_autoload_register(array(__CLASS__, 'load'));
+	}
+
+	private static function dispatch()
+	{
 
 	}
 
-	private static function dispatch() {
+	/**
+	 * Define a custom Load method
+	 */
+
+	private static function load($classname)
+	{
+		if (substr($classname, -10) == 'Controller') {
+			require_once CURR_CONTROLLER_PATH . "$classname.class.php";
+		} elseif (substr($classname, -5) == "Model") {
+			require_once MODEL_PATH . "$classname.class.php";
+		}
 
 	}
+
+
 }
