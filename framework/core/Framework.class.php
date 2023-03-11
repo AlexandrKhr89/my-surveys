@@ -64,8 +64,17 @@ class Framework
 		spl_autoload_register(array(__CLASS__, 'load'));
 	}
 
+	/**
+	 * Routing and Dispatching
+	 */
+
 	private static function dispatch()
 	{
+//		Instantiate the controller class and call its action method
+		$controller_name = CONTROLLER . "Controller";
+		$action_name = ACTION . "Action";
+		$controller = new $controller_name;
+		$controller->$action_name();
 
 	}
 
